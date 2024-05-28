@@ -1,0 +1,297 @@
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"10 FPS" = "10 FPS";
+
+/* No comment provided by engineer. */
+"15 FPS" = "15 FPS";
+
+/* No comment provided by engineer. */
+"24 FPS" = "24 FPS";
+
+/* No comment provided by engineer. */
+"30 FPS" = "30 FPS";
+
+/* No comment provided by engineer. */
+"60 FPS" = "60 FPS";
+
+/* No comment provided by engineer. */
+"90 FPS" = "90 FPS";
+
+/* No comment provided by engineer. */
+"120 FPS" = "120 FPS";
+
+/* No comment provided by engineer. */
+"144 FPS" = "144 FPS";
+
+/* No comment provided by engineer. */
+"240 FPS" = "240 FPS";
+
+/* No comment provided by engineer. */
+"AAC" = "AAC";
+
+/* No comment provided by engineer. */
+"ALAC (Lossless)" = "ALAC（無損）";
+
+/* No comment provided by engineer. */
+"App's Audio" = "應用程式聲音";
+
+/* No comment provided by engineer. */
+"Automatically check for updates" = "自動檢查更新";
+
+/* No comment provided by engineer. */
+"Automatically download updates" = "自動下載更新";
+
+/* No comment provided by engineer. */
+"Background" = "背景";
+
+/* No comment provided by engineer. */
+"Black" = "黑色";
+
+/* No comment provided by engineer. */
+"Blue" = "藍色";
+
+/* No comment provided by engineer. */
+"BT.709" = "BT.709";
+
+/* No comment provided by engineer. */
+"BT.2020" = "BT.2020";
+
+/* No comment provided by engineer. */
+"Cancel" = "取消";
+
+/* No comment provided by engineer. */
+"Check for Updates…" = "檢查更新⋯";
+
+/* No comment provided by engineer. */
+"Close" = "關閉";
+
+/* No comment provided by engineer. */
+"Color Space" = "色彩空間";
+
+/* No comment provided by engineer. */
+"Connect your device via USB" = "透過 USB 連接你的裝置";
+
+/* No comment provided by engineer. */
+"Custom" = "自定";
+
+/* No comment provided by engineer. */
+"Default" = "預設";
+
+/* No comment provided by engineer. */
+"Delay Before Recording" = "於錄製之前延遲";
+
+/* No comment provided by engineer. */
+"Display P3" = "Display P3";
+
+/* No comment provided by engineer. */
+"Enable Acoustic Echo Cancellation" = "啟用聲學回聲消除";
+
+/* No comment provided by engineer. */
+"Encoder" = "編碼器";
+
+/* No comment provided by engineer. */
+"Exclude QuickRecorder itself" = "排除 QuickRecorder 自身";
+
+/* No comment provided by engineer. */
+"Exclude the \"Desktop Files\" layer" = "排除「桌面檔案」層";
+
+/* No comment provided by engineer. */
+"Extreme - 320Kbps" = "極好 - 320Kbps";
+
+/* No comment provided by engineer. */
+"FLAC (Lossless)" = "FLAC（無損）";
+
+/* No comment provided by engineer. */
+"Format" = "格式";
+
+/* No comment provided by engineer. */
+"Frame rate" = "幀率";
+
+/* No comment provided by engineer. */
+"Good - 192Kbps" = "好 - 192Kbps";
+
+/* No comment provided by engineer. */
+"Gray" = "灰色";
+
+/* No comment provided by engineer. */
+"Green" = "綠色";
+
+/* No comment provided by engineer. */
+"H.264" = "H.264";
+
+/* No comment provided by engineer. */
+"H.265" = "H.265";
+
+/* No comment provided by engineer. */
+"High" = "高";
+
+/* No comment provided by engineer. */
+"High - 256Kbps" = "高 - 256Kbps";
+
+/* No comment provided by engineer. */
+"High (auto)" = "高（自動）";
+
+/* No comment provided by engineer. */
+"Highlight the Mouse Cursor" = "突出顯示滑鼠指標";
+
+/* No comment provided by engineer. */
+"If enabled, all files on the Desktop will be hidden from the video when recording." = "如啟用，錄制時桌面上的所有檔案將會從影片中隱藏。";
+
+/* No comment provided by engineer. */
+"If you are on a call, enable \"Mute\"" = "如你進行通話，請啟用「靜音」";
+
+/* No comment provided by engineer. */
+"Include MenuBar in Recording" = "在錄製當中包括選單列";
+
+/* No comment provided by engineer. */
+"Launch at login" = "登入時開啟";
+
+/* No comment provided by engineer. */
+"Lossless" = "無損";
+
+/* No comment provided by engineer. */
+"Low" = "低";
+
+/* No comment provided by engineer. */
+"Low (0.5x)" = "低（0.5x）";
+
+/* No comment provided by engineer. */
+"Medium" = "中等";
+
+/* No comment provided by engineer. */
+"Microphone" = "咪高風";
+
+/* No comment provided by engineer. */
+"MOV" = "MOV";
+
+/* No comment provided by engineer. */
+"MP3" = "MP3";
+
+/* No comment provided by engineer. */
+"MP4" = "MP4";
+
+/* No comment provided by engineer. */
+"Mute" = "靜音";
+
+/* No comment provided by engineer. */
+"No Devices Found!" = "找不到裝置！";
+
+/* No comment provided by engineer. */
+"Normal - 128Kbps" = "常規 - 128Kbps";
+
+/* No comment provided by engineer. */
+"Normal (1x)" = "正常（1x）";
+
+/* No comment provided by engineer. */
+"Not available for \"Single Window Capture\"" = "無法用作「單一視窗擷取」";
+
+/* No comment provided by engineer. */
+"Open video trimmer after recording" = "錄製之後開啟影片修剪器";
+
+/* No comment provided by engineer. */
+"Opus" = "Opus";
+
+/* No comment provided by engineer. */
+"Orange" = "橙色";
+
+/* No comment provided by engineer. */
+"Pause / Resume" = "暫停 / 繼續";
+
+/* No comment provided by engineer. */
+"Please select the App(s) to record" = "請選取要錄製的應用程式";
+
+/* No comment provided by engineer. */
+"Please select the screen to record" = "請選取要錄製的螢幕";
+
+/* No comment provided by engineer. */
+"Please select the window(s) to record" = "請選取視窗以錄製";
+
+/* No comment provided by engineer. */
+"Please unlock!" = "請解鎖！";
+
+/* No comment provided by engineer. */
+"Presenter Overlay Delay" = "演講者疊加層延遲";
+
+/* No comment provided by engineer. */
+"Preset" = "預設";
+
+/* No comment provided by engineer. */
+"Quality" = "質素";
+
+/* No comment provided by engineer. */
+"Quit" = "結束";
+
+/* No comment provided by engineer. */
+"Record Current Screen" = "錄製當前螢幕";
+
+/* No comment provided by engineer. */
+"Record Cursor" = "錄製指標";
+
+/* No comment provided by engineer. */
+"Record Microphone to Main Track" = "錄製咪高風至主軌道";
+
+/* No comment provided by engineer. */
+"Record System Audio" = "錄製系統聲音";
+
+/* No comment provided by engineer. */
+"Record Topmost Window" = "錄製最上邊的視窗";
+
+/* No comment provided by engineer. */
+"Recording with Alpha Channel" = "使用 Alpha 通道錄製";
+
+/* No comment provided by engineer. */
+"Red" = "紅色";
+
+/* No comment provided by engineer. */
+"Refresh" = "重新整理";
+
+/* No comment provided by engineer. */
+"Resolution" = "解像度";
+
+/* No comment provided by engineer. */
+"Save Current Frame" = "儲存當前時間";
+
+/* No comment provided by engineer. */
+"Select Area to Record" = "選取區域以錄製";
+
+/* No comment provided by engineer. */
+"Select Save Folder" = "選取儲存資料夾";
+
+/* No comment provided by engineer. */
+"Set custom background color:" = "設定自定背景顏色：";
+
+/* No comment provided by engineer. */
+"Show Dock Icon" = "顯示 Dock 圖示";
+
+/* No comment provided by engineer. */
+"Show MenuBar Icon" = "顯示選單列圖示";
+
+/* No comment provided by engineer. */
+"sRGB" = "sRGB";
+
+/* No comment provided by engineer. */
+"Start" = "開始";
+
+/* No comment provided by engineer. */
+"Stop Recording" = "停止錄製";
+
+/* No comment provided by engineer. */
+"These apps will be excluded when recording \"Screen\" or \"Screen Area\"\n* But if the app is launched after the recording starts, it cannot be excluded." = "這些應用程式將會於錄製「螢幕」或「螢幕區域」時被排除\n* 然而，如果在錄製開始之後開啟這些應用程式，則無法排除。";
+
+/* No comment provided by engineer. */
+"Toggle Screen Magnifier" = "切換螢幕放大鏡";
+
+/* No comment provided by engineer. */
+"Transparent" = "透明";
+
+/* No comment provided by engineer. */
+"Wallpaper" = "背景圖片";
+
+/* No comment provided by engineer. */
+"White" = "白色";
+
+/* No comment provided by engineer. */
+"Yellow" = "黃色";
+

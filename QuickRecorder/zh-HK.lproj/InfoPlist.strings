@@ -1,0 +1,12 @@
+/* Bundle name */
+"CFBundleName" = "QuickRecorder";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "QuickRecorder 需要此權限才能一齊錄製相機與你的顯示器內容。";
+
+/* Copyright (human-readable) */
+"NSHumanReadableCopyright" = "Copyright © 2024 lihaoyun6. 保留一切權利。";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "QuickRecorder 需要這個權限才能一齊錄製咪高風與顯示器的內容。";
+

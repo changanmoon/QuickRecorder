@@ -66,6 +66,9 @@
 		18FEBDAB2BD01E82003F09BC /* WinSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinSelector.swift; sourceTree = "<group>"; };
 		18FEBDAD2BD10ED1003F09BC /* ScreenSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSelector.swift; sourceTree = "<group>"; };
 		18FEBDAF2BD2C0D1003F09BC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F62466172C06323900652D01 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		F62466182C06323900652D01 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		F662B50F2C05B735005BA90D /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "zh-HK"; path = "zh-HK.lproj/Credits.rtf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +206,7 @@
 				Base,
 				"zh-Hans",
 				it,
+				"zh-HK",
 			);
 			mainGroup = 18D3BDDE2BCE5DC1006CFFC0;
 			packageReferences = (
@@ -269,6 +273,7 @@
 				1862BF902BD5494F003ED522 /* zh-Hans */,
 				1862BF912BD5495D003ED522 /* Base */,
 				18A735972BFBA12F002314AF /* it */,
+				F662B50F2C05B735005BA90D /* zh-HK */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 			children = (
 				189BD5E72BDE34B80056D06C /* zh-Hans */,
 				18A735992BFBA138002314AF /* it */,
+				F62466172C06323900652D01 /* zh-HK */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -287,6 +293,7 @@
 			children = (
 				18D3BDFC2BCE5DF5006CFFC0 /* zh-Hans */,
 				18A735982BFBA132002314AF /* it */,
+				F62466182C06323900652D01 /* zh-HK */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
