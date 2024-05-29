@@ -86,6 +86,9 @@
 "Display P3" = "Display P3";
 
 /* No comment provided by engineer. */
+"Don't Create Thumbnails" = "不要製作縮圖";
+
+/* No comment provided by engineer. */
 "Enable Acoustic Echo Cancellation" = "啟用聲學回聲消除";
 
 /* No comment provided by engineer. */
@@ -267,6 +270,9 @@
 
 /* No comment provided by engineer. */
 "Show MenuBar Icon" = "顯示選單列圖示";
+
+/* No comment provided by engineer. */
+"Show Windows with No Title" = "顯示無標題的視窗";
 
 /* No comment provided by engineer. */
 "sRGB" = "sRGB";
