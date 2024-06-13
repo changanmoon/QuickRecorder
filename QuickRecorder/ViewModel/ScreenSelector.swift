@@ -122,13 +122,13 @@ struct ScreenSelector: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("Resolution")
-                                Text("Frame rate")
+                                Text("Frame Rate")
                             }
                             VStack(alignment: .leading, spacing: 10) {
                                 Picker("", selection: $highRes) {
                                     Text("High (auto)").tag(2)
                                     Text("Normal (1x)").tag(1)
-                                    Text("Low (0.5x)").tag(0)
+                                    //Text("Low (0.5x)").tag(0)
                                 }.buttonStyle(.borderless)
                                 Picker("", selection: $frameRate) {
                                     Text("240 FPS").tag(240)
@@ -169,22 +169,40 @@ struct ScreenSelector: View {
                             }.scaledToFit()
                             Divider().frame(height: 50)
                             VStack(alignment: .leading, spacing: isMacOS12 ? 10 : 2) {
-                                Toggle(isOn: $showMouse) { Text("Record Cursor").padding(.leading, 5) }
-                                    .toggleStyle(.checkbox)
+                                Toggle(isOn: $showMouse) {
+                                    HStack(spacing:0){
+                                        Image(systemName: "cursorarrow").frame(width: 20)
+                                        Text("Record Cursor")
+                                    }
+                                }.toggleStyle(.checkbox)
                                 if #available(macOS 13, *) {
-                                    Toggle(isOn: $recordWinSound) { Text("App's Audio").padding(.leading, 5) }
-                                        .toggleStyle(.checkbox)
+                                    Toggle(isOn: $recordWinSound) {
+                                        HStack(spacing:0){
+                                            Image(systemName: "speaker.wave.1.fill").frame(width: 20)
+                                            Text("App's Audio")
+                                        }
+                                    }.toggleStyle(.checkbox)
                                 }
                                 if #available(macOS 14, *) { // apparently they changed onChange in Sonoma
                                     Toggle(isOn: $recordMic) {
-                                        Text("Microphone").padding(.leading, 5)
-                                    }.toggleStyle(.checkbox).onChange(of: recordMic) {
+                                        HStack(spacing:0){
+                                            Image(systemName: "mic.fill").frame(width: 20)
+                                            Text("Microphone")
+                                        }
+                                    }
+                                    .toggleStyle(.checkbox)
+                                    .onChange(of: recordMic) {
                                         Task { await SCContext.performMicCheck() }
                                     }
                                 } else {
                                     Toggle(isOn: $recordMic) {
-                                        Text("Microphone").padding(.leading, 5)
-                                    }.toggleStyle(.checkbox).onChange(of: recordMic) { _ in
+                                        HStack(spacing:0){
+                                            Image(systemName: "mic.fill").frame(width: 20)
+                                            Text("Microphone")
+                                        }
+                                    }
+                                    .toggleStyle(.checkbox)
+                                    .onChange(of: recordMic) { _ in
                                         Task { await SCContext.performMicCheck() }
                                     }
                                 }
