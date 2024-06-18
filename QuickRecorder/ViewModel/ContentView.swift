@@ -24,7 +24,7 @@ struct ContentView: View {
                     Color.clear
                         .background(.ultraThinMaterial)
                         .environment(\.controlActiveState, .active)
-                        .cornerRadius(13.1)
+                        .cornerRadius(14)
                     //.environment(\.colorScheme, .dark)
                 }
                 HStack {
@@ -140,10 +140,10 @@ struct ContentView: View {
                 }
             }
         }
-        .overlay(
+        /*.overlay(
             RoundedRectangle(cornerRadius: 13, style: .continuous)
                 .strokeBorder(.secondary.opacity(fromStatusBar ? 0.0 : 0.4), lineWidth: isMacOS14 ? 1.5 : 0.0)
-        )
+        )*/
     }
     
     struct SelectorView: View {
@@ -176,6 +176,48 @@ struct ContentView: View {
     }
 }
 
+struct CountdownView: View {
+    @State var countdownValue: Int = 00
+    @State private var timer: Timer?
+    var atEnd: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color("mypurple").environment(\.colorScheme, .dark)
+            Text("\(countdownValue)")
+                .font(.system(size: 72))
+                .foregroundColor(.white)
+                .offset(y: -10)
+            Button(action: {
+                timer?.invalidate()
+                if let w = NSApp.windows.first(where: { $0.title == "Countdown Panel".local }) { w.close() }
+            }, label: {
+                ZStack {
+                    Color.white.opacity(0.2)
+                    Text("Cancel").foregroundColor(.white)
+                }.frame(width: 120, height: 24)
+            })
+            .buttonStyle(.plain)
+            .padding(.top, 96)
+        }
+        .frame(width: 120, height: 120)
+        .cornerRadius(10)
+        .onAppear{
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                if countdownValue > 1 {
+                    countdownValue -= 1
+                } else {
+                    timer.invalidate()
+                    if let w = NSApp.windows.first(where: { $0.title == "Countdown Panel".local }) { w.close() }
+                    atEnd()
+                }
+            }
+        }
+    }
+}
+
+
 extension AppDelegate {
     
     func closeMainWindow() { for w in NSApplication.shared.windows.filter({ $0.title == "QuickRecorder".local }) { w.close() } }
@@ -187,7 +229,6 @@ extension AppDelegate {
         guard let screen = scDisplay.nsScreen else { return }
         let screenshotWindow = ScreenshotWindow(contentRect: screen.frame, styleMask: [], backing: .buffered, defer: false, size: size, force: noPanel)
         screenshotWindow.title = "Area Selector".local
-        //screenshotWindow.isReleasedWhenClosed = true
         screenshotWindow.orderFront(self)
         screenshotWindow.orderFrontRegardless()
         if !noPanel {
@@ -196,13 +237,10 @@ extension AppDelegate {
             let contentView = NSHostingView(rootView: AreaSelector(screen: scDisplay))
             contentView.frame = NSRect(x: wX, y: wY, width: 780, height: 110)
             contentView.focusRingType = .none
-            let areaPanel = NNSWindow(contentRect: contentView.frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
+            let areaPanel = NSWindow(contentRect: contentView.frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
             areaPanel.setFrame(contentView.frame, display: true)
             areaPanel.level = .screenSaver
             areaPanel.title = "Start Recording".local
-            areaPanel.standardWindowButton(.closeButton)?.isHidden = true
-            areaPanel.standardWindowButton(.miniaturizeButton)?.isHidden = true
-            areaPanel.standardWindowButton(.zoomButton)?.isHidden = true
             areaPanel.contentView = contentView
             areaPanel.backgroundColor = .clear
             areaPanel.titleVisibility = .hidden
@@ -210,7 +248,24 @@ extension AppDelegate {
             areaPanel.titlebarAppearsTransparent = true
             areaPanel.isMovableByWindowBackground = true
             //areaPanel.setFrameOrigin(NSPoint(x: wX, y: wY))
-            areaPanel.makeKeyAndOrderFront(self)
+            areaPanel.orderFront(self)
+        }
+    }
+    
+    func createCountdownPanel(screen: SCDisplay, action: @escaping () -> Void) {
+        guard let screen = screen.nsScreen else { return }
+        let countdown = ud.integer(forKey: "countdown")
+        if countdown == 0 {
+            action()
+        } else {
+            let wX = (screen.frame.width - 120) / 2 + screen.frame.minX
+            let wY = (screen.frame.height - 120) / 2 + screen.frame.minY
+            let frame =  NSRect(x: wX, y: wY, width: 120, height: 120)
+            let contentView = NSHostingView(rootView: CountdownView(countdownValue: countdown, atEnd: action))
+            contentView.frame = frame
+            countdownPanel.contentView = contentView
+            countdownPanel.setFrame(frame, display: true)
+            countdownPanel.makeKeyAndOrderFront(self)
         }
     }
     

@@ -23,24 +23,69 @@ struct DashWindow: View {
     }
 }
 
-struct AreaSelector: View {
-    private enum Field: Int, Hashable {
-        case width, height
-    }
+struct resizeView: View {
+    private enum Field: Int, Hashable { case width, height }
     @FocusState private var focusedField: Field?
-    @Environment(\.colorScheme) var colorScheme
-    //@NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @State private var timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
-    @State private var start = Date.now
-    @State private var counter: Int?
+    
+    @AppStorage("areaWidth")  private var areaWidth: Int = 600
+    @AppStorage("areaHeight") private var areaHeight: Int = 450
+    @AppStorage("highRes")    private var highRes: Int = 2
+    
+    var appDelegate = AppDelegate.shared
+    var screen: SCDisplay!
+    
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 4) {
+                Text("Area Size:")
+                TextField("", value: $areaWidth, formatter: NumberFormatter())
+                    .frame(width: 60)
+                    .textFieldStyle(.roundedBorder)
+                    .focused($focusedField, equals: .width)
+                    .onChange(of: areaWidth) { newValue in
+                        if !appDelegate.isResizing {
+                            areaWidth = min(max(newValue, 1), screen.width)
+                            resize()
+                        }
+                    }
+                Image(systemName: "xmark").font(.system(size: 10, weight: .medium))
+                TextField("", value: $areaHeight, formatter: NumberFormatter())
+                    .frame(width: 60)
+                    .textFieldStyle(.roundedBorder)
+                    .focused($focusedField, equals: .height)
+                    .onChange(of: areaHeight) { newValue in
+                        if !appDelegate.isResizing {
+                            areaHeight = min(max(newValue, 1), screen.height)
+                            resize()
+                        }
+                    }
+            }
+            HStack(spacing: 4) {
+                Text("Output Size:")
+                let scale = Int(screen.nsScreen!.backingScaleFactor)
+                Text(" \(highRes == 2 ? areaWidth * scale : areaWidth) x \(highRes == 2 ? areaHeight * scale : areaHeight)")
+                Spacer()
+            }
+        }.onAppear{ focusedField = .width }
+    }
+    
+    func resize() {
+        appDelegate.closeAllWindow(except: "Start Recording".local)
+        AppDelegate.shared.showAreaSelector(size: NSSize(width: areaWidth, height: areaHeight), noPanel: true)
+    }
+}
+
+struct AreaSelector: View {
+    //private enum Field: Int, Hashable { case width, height }
+    //@FocusState private var focusedField: Field?
+    //@Environment(\.colorScheme) var colorScheme
     @State private var isPopoverShowing = false
+    @State private var resizePopoverShowing = false
     @State private var autoStop = 0
-    @State private var isUserInput: Bool = false
-    @State private var programmaticUpdate: Bool = false
     
     var screen: SCDisplay!
     var appDelegate = AppDelegate.shared
-    let savedArea = ud.object(forKey: "savedArea") as! [String: [String: CGFloat]]
+    //let savedArea = ud.object(forKey: "savedArea") as! [String: [String: CGFloat]]
     
     @AppStorage("frameRate")       private var frameRate: Int = 60
     @AppStorage("videoQuality")    private var videoQuality: Double = 1.0
@@ -50,36 +95,47 @@ struct AreaSelector: View {
     @AppStorage("recordMic")       private var recordMic: Bool = false
     @AppStorage("recordWinSound")  private var recordWinSound: Bool = true
     @AppStorage("background")      private var background: BackgroundType = .wallpaper
-    //@AppStorage("removeWallpaper") private var removeWallpaper: Bool = false
     @AppStorage("highRes")         private var highRes: Int = 2
-    @AppStorage("countdown")       private var countdown: Int = 0
-    
-    @AppStorage("areaWidth") private var areaWidth: Int = 600
-    @AppStorage("areaHeight") private var areaHeight: Int = 450
+    @AppStorage("recordHDR")       private var recordHDR: Bool = false
     
     var body: some View {
-        @State var width: String = "\(areaWidth)"
-        @State var height: String = "\(areaHeight)"
-        ZStack{
+        ZStack {
             Color(nsColor: NSColor.windowBackgroundColor)
                 .cornerRadius(10)
             VStack {
                 HStack(spacing: 4) {
                     Spacer()
                     Button(action: {
-                        for w in NSApplication.shared.windows.filter({ $0.title == "Area Selector".local || $0.title == "Start Recording".local}) { w.close() }
-                        appDelegate.stopGlobalMouseMonitor()
+                        resizePopoverShowing = true
                     }, label: {
                         VStack{
-                            Image(systemName: "xmark.circle.fill")
+                            Image(systemName: "viewfinder.circle.fill")
                                 .font(.system(size: 36))
-                                .foregroundStyle(.secondary)
-                            Text("Cancel")
+                                .foregroundStyle(.blue)
+                            Text("Resize")
                                 .foregroundStyle(.secondary)
                                 .font(.system(size: 12))
                         }
-                        
-                    }).buttonStyle(.plain)
+                    })
+                    .buttonStyle(.plain)
+                    .sheet(isPresented: $resizePopoverShowing, content: {
+                        HStack(spacing: 10) {
+                            Button(action: {
+                                resizePopoverShowing = false
+                            }, label: {
+                                VStack{
+                                    Image(systemName: "arrow.uturn.backward.circle.fill")
+                                        .font(.system(size: 30))
+                                        .foregroundStyle(.secondary)
+                                    Text("Back")
+                                        .foregroundStyle(.secondary)
+                                        .font(.system(size: 12))
+                                }
+                                
+                            }).buttonStyle(.plain)
+                            resizeView(screen: screen)
+                        }.padding()
+                    })
                     Spacer()
                     VStack(spacing: 6) {
                         HStack {
@@ -169,6 +225,14 @@ struct AreaSelector: View {
                                         Task { await SCContext.performMicCheck() }
                                     }
                                 }
+                                if #available(macOS 15, *) {
+                                    Toggle(isOn: $recordHDR) {
+                                        HStack(spacing:0){
+                                            Image(systemName: "sparkles.square.filled.on.square").frame(width: 20)
+                                            Text("Record HDR")
+                                        }
+                                    }.toggleStyle(.checkbox)
+                                }
                             }.needScale()
                         }
                     }.padding(.leading, 18)
@@ -180,7 +244,6 @@ struct AreaSelector: View {
                             .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(.blue)
                     })
-                    .disabled(!(counter == nil))
                     .buttonStyle(.plain)
                     .padding(.top, 42.5)
                     .popover(isPresented: $isPopoverShowing, arrowEdge: .bottom, content: {
@@ -196,127 +259,53 @@ struct AreaSelector: View {
                         .padding()
                     })
                     Button(action: {
-                        if counter == 0 { startRecording() }
-                        if counter != nil { counter = nil } else { counter = countdown; start = Date.now }
+                        startRecording()
                     }, label: {
                         VStack{
                             Image(systemName: "record.circle.fill")
                                 .font(.system(size: 36))
                                 .foregroundStyle(.red)
-                            ZStack{
-                                Text("Start")
-                                    .foregroundStyle((counter != nil && counter != 0) ? .clear : .secondary)
-                                    .font(.system(size: 12))
-                                Text((counter != nil && counter != 0) ? "\(counter!)" : "")
-                                    .foregroundStyle(.secondary)
-                                    .font(.system(size: 12))
-                                    .offset(x: 1)
-                            }
+                            Text("Start")
+                                .foregroundStyle(.secondary)
+                                .font(.system(size: 12))
                         }
-                    })
-                    .buttonStyle(.plain)
+                    }).buttonStyle(.plain)
                     Spacer()
                 }
-                HStack(spacing: 4) {
-                    Text("Area Size")
-                    /*TextField("", value: $areaWidth, formatter: NumberFormatter())
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 60)
-                        .onChange(of: areaWidth) { newValue in if newValue < 1 { areaWidth = 1 } }*/
-                    TextField("", text: Binding(
-                        get: { width },
-                        set: { newValue in
-                            if newValue.allSatisfy({ $0.isNumber }) {
-                                width = newValue
-                                let w = Int(newValue) ?? areaWidth
-                                if !programmaticUpdate && w != areaWidth {
-                                    areaWidth = w
-                                    if areaHeight < 1 { areaHeight = 1 }
-                                    if areaHeight > screen.height { areaHeight = screen.height }
-                                    resize()
-                                }
-                            }
-                        }
-                    ))
-                    .textFieldStyle(.roundedBorder)
-                    .focused($focusedField, equals: .width)
-                    .frame(width: 60)
-                    .onChange(of: areaWidth) { newValue in
-                        programmaticUpdate = true
-                        width = String(newValue)
-                        programmaticUpdate = false
-                    }
-                    Image(systemName: "xmark").font(.system(size: 10, weight: .medium))
-                    /*TextField("", value: $areaHeight, formatter: NumberFormatter())
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 60)
-                        .onChange(of: areaHeight) { newValue in if newValue < 1 { areaHeight = 1 } }*/
-                    TextField("", text: Binding(
-                        get: { height },
-                        set: { newValue in
-                            if newValue.allSatisfy({ $0.isNumber }) {
-                                height = newValue
-                                let h = Int(newValue) ?? areaHeight
-                                if !programmaticUpdate && h != areaHeight {
-                                    areaHeight = h
-                                    if areaHeight < 1 { areaHeight = 1 }
-                                    if areaHeight > screen.height { areaHeight = screen.height }
-                                    resize()
-                                }
-                            }
-                        }
-                    ))
-                    .textFieldStyle(.roundedBorder)
-                    .focused($focusedField, equals: .height)
-                    .frame(width: 60)
-                    .onChange(of: areaHeight) { newValue in
-                        programmaticUpdate = true
-                        height = String(newValue)
-                        programmaticUpdate = false
-                    }
-                    //Button("Apply", action: { resize() })
-                    Spacer().frame(width: 20)
-                    Text("Output Size:")
-                    let scale = Int(screen.nsScreen!.backingScaleFactor)
-                    Text("\(highRes == 2 ? areaWidth * scale : areaWidth) x \(highRes == 2 ? areaHeight * scale : areaHeight)")
-                }.onAppear{ focusedField = .width }
             }
-        }
-        .frame(width: 700, height: 110)
-        .onReceive(timer) { t in
-            if counter == nil { return }
-            if counter! <= 1 { counter = nil; startRecording(); return }
-            if t.timeIntervalSince1970 - start.timeIntervalSince1970 >= 1 { counter! -= 1; start = Date.now }
-        }
-    }
-    
-    func resize() {
-        appDelegate.closeAllWindow(except: "Start Recording".local)
-        //let scale = screen.nsScreen!.backingScaleFactor
-        //areaWidth = areaWidth < 20 ? 20 : areaWidth
-        //areaHeight = areaHeight < 20 ? 20 : areaHeight
-        AppDelegate.shared.showAreaSelector(size: NSSize(width: areaWidth, height: areaHeight), noPanel: true)
+            Button(action: {
+                for w in NSApplication.shared.windows.filter({ $0.title == "Area Selector".local || $0.title == "Start Recording".local}) { w.close() }
+                appDelegate.stopGlobalMouseMonitor()
+            }, label: {
+                Image(systemName: "x.circle")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.secondary)
+            })
+            .buttonStyle(.plain)
+            .padding(.leading, -354).padding(.top, -39)
+        }.frame(width: 720, height: 90)
     }
     
     func startRecording() {
-        //for w in NSApplication.shared.windows.filter({ $0.title == "Area Selector".local || $0.title == "Start Recording".local}) { w.close() }
         appDelegate.closeAllWindow()
         appDelegate.stopGlobalMouseMonitor()
-        var window = NSWindow()
-        let area = SCContext.screenArea!
-        guard let nsScreen = screen.nsScreen else { return }
-        let frame = NSRect(x: Int(area.origin.x + nsScreen.frame.minX - 5), y: Int(area.origin.y + nsScreen.frame.minY - 5), width: Int(area.width + 10), height: Int(area.height + 10))
-        window = NSWindow(contentRect: frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
-        window.hasShadow = false
-        window.level = .screenSaver
-        window.ignoresMouseEvents = true
-        window.isReleasedWhenClosed = false
-        window.title = "Area Overlayer".local
-        window.backgroundColor = NSColor.clear
-        window.contentView = NSHostingView(rootView: DashWindow())
-        window.orderFront(self)
-        SCContext.autoStop = autoStop
-        appDelegate.prepRecord(type: "area", screens: screen, windows: nil, applications: nil)
+        appDelegate.createCountdownPanel(screen: screen) {
+            var window = NSWindow()
+            let area = SCContext.screenArea!
+            guard let nsScreen = screen.nsScreen else { return }
+            let frame = NSRect(x: Int(area.origin.x + nsScreen.frame.minX - 5), y: Int(area.origin.y + nsScreen.frame.minY - 5), width: Int(area.width + 10), height: Int(area.height + 10))
+            window = NSWindow(contentRect: frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
+            window.hasShadow = false
+            window.level = .screenSaver
+            window.ignoresMouseEvents = true
+            window.isReleasedWhenClosed = false
+            window.title = "Area Overlayer".local
+            window.backgroundColor = NSColor.clear
+            window.contentView = NSHostingView(rootView: DashWindow())
+            window.orderFront(self)
+            SCContext.autoStop = autoStop
+            appDelegate.prepRecord(type: "area", screens: screen, windows: nil, applications: nil)
+        }
     }
 }
 
@@ -433,6 +422,7 @@ class ScreenshotOverlayView: NSView {
         activeHandle = handleForPoint(location)
         if let rect = selectionRect, NSPointInRect(location, rect) { dragIng = true }
         needsDisplay = true
+        AppDelegate.shared.isResizing = true
     }
     
     override func mouseDragged(with event: NSEvent) {
@@ -524,6 +514,7 @@ class ScreenshotOverlayView: NSView {
         initialLocation = nil
         activeHandle = .none
         dragIng = false
+        AppDelegate.shared.isResizing = false
         if let rect = selectionRect {
             SCContext.screenArea = rect
             //let rectArray = [Int(rect.origin.x), Int(rect.origin.y), Int(rect.size.width), Int(rect.size.height)]
